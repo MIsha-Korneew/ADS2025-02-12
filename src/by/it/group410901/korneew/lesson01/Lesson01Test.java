@@ -1,4 +1,4 @@
-package by.it.group410901.korneew.lesson01.lesson01;
+package by.it.group410901.korneew.lesson01;
 
 import org.junit.Test;
 
