@@ -1,5 +1,6 @@
 package by.it.group410901.korneew.lesson07;
 
+
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -41,11 +42,30 @@ public class B_EditDist {
 
     int getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[][] temp = new int[one.length()+1][two.length()+1];
 
-
-        int result = 0;
+        for(int i = 0; i <= one.length(); i++){
+            for(int j = 0; j <= two.length(); j++){
+                if(i == 0){
+                    temp[i][j] = j; //все вставки
+                } else if(j == 0) {
+                    temp[i][j] = i; //все удаления
+                } else {
+                    int cost = one.charAt(i - 1) == two.charAt(j - 1) ? 0 : 1;
+                    temp[i][j] = Math.min(
+                            Math.min(temp[i-1][j]+1, temp[i][j-1]+1),
+                            temp[i-1][j-1]+cost
+                    );
+                }
+            }
+        }
+        //         c   u   t
+        //       | 0   1   2   3
+        //    c  | 1   0   1   2
+        //   a  | 2   1   1   2                   примерчик
+        //   t  | 3   2   2   1
         //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        return temp[one.length()][two.length()];
     }
 
 
