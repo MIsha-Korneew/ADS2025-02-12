@@ -1,5 +1,4 @@
 package by.it.group410901.korneew.lesson07;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -47,14 +46,58 @@ import java.util.Scanner;
 
 
 public class C_EditDist {
-
     String getDistanceEdinting(String one, String two) {
         //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[][] dp = new int[one.length() + 1][two.length() + 1];
 
+        for (int i = 0; i <= one.length(); i++) {
+            for (int j = 0; j <= two.length(); j++) {
+                if (i == 0) {
+                    dp[i][j] = j;
+                } else if (j == 0) {
+                    dp[i][j] = i;
+                } else {
+                    dp[i][j] = Math.min(
+                            Math.min(
+                                    dp[i - 1][j] + 1,
+                                    dp[i][j - 1] + 1),
+                            dp[i - 1][j - 1] + (one.charAt(i - 1) == two.charAt(j - 1) ? 0 : 1));
+                }
+            }
+        }
 
-        String result = "";
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        return result;
+        int i = one.length(), j = two.length();
+        StringBuilder result = new StringBuilder();
+
+        while (i > 0 && j > 0) {
+            if (one.charAt(i - 1) == two.charAt(j - 1)) {
+                result.append("#,");
+                i--;
+                j--;
+            } else if (dp[i][j] == dp[i - 1][j - 1] + 1) {
+                result.append("~").append(two.charAt(j - 1)).append(",");
+                i--;
+                j--;
+            } else if (dp[i][j] == dp[i][j - 1] + 1) {
+                result.append("+").append(two.charAt(j - 1)).append(",");
+                j--;
+            } else {
+                result.append("-").append(one.charAt(i - 1)).append(",");
+                i--;
+            }
+        }
+
+        while (i > 0) {
+            result.append("-").append(one.charAt(i - 1)).append(",");
+            i--;
+        }
+
+        while (j > 0) {
+            result.append("+").append(two.charAt(j - 1)).append(",");
+            j--;
+        }
+
+        return result.toString();
     }
 
 
