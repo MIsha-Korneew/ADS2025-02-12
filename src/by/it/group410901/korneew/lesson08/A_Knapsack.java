@@ -1,8 +1,5 @@
-package by.it.a_khmelev.lesson08;
+package by.it.group410901.korneew.lesson08;
 
-import by.it.a_khmelev.lesson07.A_EditDist;
-
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;

@@ -1,6 +1,5 @@
-package by.it.a_khmelev.lesson08;
+package by.it.group410901.korneew.lesson08;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
