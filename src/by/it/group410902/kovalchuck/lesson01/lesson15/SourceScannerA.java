@@ -14,12 +14,12 @@ import java.util.List;
 public class SourceScannerA {
 
     public static void main(String[] args) {
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ src пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //Получаем путь к каталогу src текущего проекта
         String src = System.getProperty("user.dir") + File.separator + "src" + File.separator;
 
         List<FileData> processedFiles = processJavaFiles(src);
 
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //Выводим отсортированные результаты
         printResults(processedFiles);
     }
 
@@ -28,101 +28,101 @@ public class SourceScannerA {
         Path srcPath = Paths.get(srcDir);
 
         try {
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            //обходим все файлы и подкаталоги
             Files.walk(srcPath)
-                    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Java пїЅпїЅпїЅпїЅпїЅ
+                    //Фильтруем только Java файлы
                     .filter(path -> path.toString().endsWith(".java")).forEach(path -> {
                         try {
                             String content = readFileContent(path);
-                            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                            //Проверяем, не является ли файл тестом
                             if (!isTestFile(content)) {
 
                                 String processedContent = processContent(content);
-                                //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+                                //Получаем относительный путь
                                 String relativePath = srcPath.relativize(path).toString();
-                                //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                                //Вычисляем размер обработанного содержимого
                                 int size = processedContent.getBytes(StandardCharsets.UTF_8).length;
-                                //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                                //Добавляем данные файла в результат
                                 result.add(new FileData(relativePath, size));
                             }
                         } catch (IOException e) {
-                            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                            //Игнорируем ошибки чтения файлов
                         }
                     });
         } catch (IOException e) {
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            //Игнорируем ошибки обхода директорий
         }
 
         return result;
     }
 
     private static String readFileContent(Path path) throws IOException {
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ UTF-8 пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ MalformedInputException
+        //Используем UTF-8 с обработкой ошибок для избежания MalformedInputException
         Charset charset = StandardCharsets.UTF_8;
         try {
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+            //Пытаемся прочитать файл как текст
             return Files.readString(path, charset);
         } catch (IOException e) {
-            //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            //Если возникла ошибка, пробуем прочитать как последовательность байтов и преобразовать
             byte[] bytes = Files.readAllBytes(path);
             return new String(bytes, charset);
         }
     }
 
     private static boolean isTestFile(String content) {
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //Проверяем, содержит ли файл аннотации тестирования
         return content.contains("@Test") || content.contains("org.junit.Test");
     }
 
     private static String processContent(String content) {
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ package пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //Удаляем package и импорты
         StringBuilder result = new StringBuilder();
-        boolean inMultiLineComment = false; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-        boolean inString = false; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-        char prevChar = '\0'; //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        boolean inMultiLineComment = false; //нахождение в многострочном комментарии
+        boolean inString = false; // нахождение внутри строки
+        char prevChar = '\0'; //символ для обработки экранирования
 
         for (int i = 0; i < content.length(); i++) {
             char currentChar = content.charAt(i);
 
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            //Обработка начала многострочного комментария
             if (!inString && !inMultiLineComment && currentChar == '/' && i + 1 < content.length() && content.charAt(i + 1) == '*') {
                 inMultiLineComment = true;
-                i++; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                i++; //Пропускаем следующий символ
                 continue;
             }
 
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            //Обработка конца многострочного комментария
             if (inMultiLineComment && currentChar == '*' && i + 1 < content.length() && content.charAt(i + 1) == '/') {
                 inMultiLineComment = false;
-                i++; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                i++; //Пропускаем следующий символ
                 continue;
             }
 
-            //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            //Если находимся в многострочном комментарии, пропускаем символы
             if (inMultiLineComment) {
                 prevChar = currentChar;
                 continue;
             }
 
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+            //Обработка строк
             if (!inMultiLineComment && currentChar == '"' && prevChar != '\\') {
                 inString = !inString;
             }
 
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            //Обработка однострочных комментариев
             if (!inString && !inMultiLineComment && currentChar == '/' && i + 1 < content.length() && content.charAt(i + 1) == '/') {
-                //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                //Пропускаем все символы до конца строки
                 while (i < content.length() && content.charAt(i) != '\n') {
                     i++;
                 }
-                //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                //Добавляем символ новой строки для сохранения структуры
                 if (i < content.length()) {
                     result.append('\n');
                 }
                 continue;
             }
 
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            //Добавляем символ, если не находимся в комментарии
             if (!inMultiLineComment) {
                 result.append(currentChar);
             }
@@ -132,19 +132,19 @@ public class SourceScannerA {
 
         String withoutComments = result.toString();
 
-        //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ package пїЅ import пїЅпїЅпїЅпїЅпїЅпїЅ
+        //Теперь удаляем package и import строки
         String[] lines = withoutComments.split("\\r?\\n");
         StringBuilder finalResult = new StringBuilder();
 
         for (String line : lines) {
             String trimmedLine = line.trim();
-            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ package пїЅпїЅпїЅ import
+            //Сохраняем только строки, не начинающиеся с package или import
             if (!trimmedLine.startsWith("package") && !trimmedLine.startsWith("import")) {
                 finalResult.append(line).append("\n");
             }
         }
 
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ <33 пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
+        //Удаляем символы с кодом <33 в начале и конце
         String processed = finalResult.toString();
         return removeLeadingTrailingControlChars(processed);
     }
@@ -152,16 +152,16 @@ public class SourceScannerA {
     private static String removeLeadingTrailingControlChars(String text) {
         if (text.isEmpty()) return text;
 
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        //Удаляем управляющие символы в начале строки
         int start = 0;
         while (start < text.length() && text.charAt(start) < 33) {
             start++;
         }
 
-        //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        //Если весь текст состоит из управляющих символов
         if (start >= text.length()) return "";
 
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        //Удаляем управляющие символы в конце строки
         int end = text.length();
         while (end > start && text.charAt(end - 1) < 33) {
             end--;
@@ -171,17 +171,17 @@ public class SourceScannerA {
     }
 
     private static void printResults(List<FileData> files) {
-        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ), пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅ пїЅпїЅпїЅпїЅ
+        //Сортируем файлы по размеру (по возрастанию), а при равных размерах - по пути
         files.stream()
                 .sorted(Comparator.comparingInt(FileData::getSize)
                         .thenComparing(FileData::getPath))
                 .forEach(file -> System.out.println(file.getSize() + " " + file.getPath()));
     }
 
-    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
+    //Вспомогательный класс для хранения данных о файле
     private static class FileData {
-        private final String path; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
-        private final int size; //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        private final String path; //Относительный путь файла
+        private final int size; //Размер обработанного содержимого в байтах
 
         public FileData(String path, int size) {
             this.path = path;

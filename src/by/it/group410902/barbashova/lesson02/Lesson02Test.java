@@ -1,4 +1,8 @@
+<<<<<<<< HEAD:src/by/it/group410902/derzhavskaya_ludmila/lesson02/Lesson02Test.java
+package by.it.group410902.derzhavskaya_ludmila.lesson02;
+========
 package by.it.group410902.barbashova.lesson02;
+>>>>>>>> origin/main:src/by/it/group410902/barbashova/lesson02/Lesson02Test.java
 
 import org.junit.Test;
 

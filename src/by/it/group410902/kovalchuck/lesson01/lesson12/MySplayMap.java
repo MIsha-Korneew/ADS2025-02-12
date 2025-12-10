@@ -20,63 +20,63 @@ public class MySplayMap implements NavigableMap<Integer, String> {
     private Node root;
     private int size;
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    // Возвращает количество элементов в дереве
     @Override
     public int size() {
         return size;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    // Проверяет, пусто ли дерево
     @Override
     public boolean isEmpty() {
         return root == null;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    // Проверяет, содержится ли ключ в дереве
     @Override
     public boolean containsKey(Object key) {
         if (!(key instanceof Integer)) return false;
         Node node = find((Integer) key);
         if (node != null) {
-            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+            // Перемещаем найденный узел в корень
             splay(node);
             return true;
         }
         return false;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    // Проверяет, содержится ли значение в дереве
     @Override
     public boolean containsValue(Object value) {
         if (!(value instanceof String)) return false;
         return containsValue(root, (String) value);
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    // Рекурсивный поиск значения в дереве
     private boolean containsValue(Node node, String value) {
         if (node == null) return false;
         if (value.equals(node.value)) {
-            // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+            // При нахождении значения перемещаем узел в корень
             splay(node);
             return true;
         }
         return containsValue(node.left, value) || containsValue(node.right, value);
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+    // Получение значения по ключу
     @Override
     public String get(Object key) {
         if (!(key instanceof Integer)) return null;
         Node node = find((Integer) key);
         if (node != null) {
-            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+            // Перемещаем найденный узел в корень
             splay(node);
             return node.value;
         }
         return null;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ splay пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Поиск узла по ключу без splay операции
     private Node find(Integer key) {
         Node current = root;
         while (current != null) {
@@ -92,12 +92,12 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return null;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Добавление или обновление пары ключ-значение
     @Override
     public String put(Integer key, String value) {
         if (key == null) throw new NullPointerException();
 
-        // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        // Если дерево пустое, создаем корень
         if (root == null) {
             root = new Node(key, value, null);
             size = 1;
@@ -106,7 +106,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
 
         Node current = root;
         Node parent = null;
-        // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // Поиск места для вставки
         while (current != null) {
             parent = current;
             int cmp = key.compareTo(current.key);
@@ -115,7 +115,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
             } else if (cmp > 0) {
                 current = current.right;
             } else {
-                // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Ключ уже существует - обновляем значение
                 String oldValue = current.value;
                 current.value = value;
                 splay(current);
@@ -123,22 +123,22 @@ public class MySplayMap implements NavigableMap<Integer, String> {
             }
         }
 
-        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+        // Создаем новый узел
         Node newNode = new Node(key, value, parent);
         int cmp = key.compareTo(parent.key);
-        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+        // Вставляем в нужное место
         if (cmp < 0) {
             parent.left = newNode;
         } else {
             parent.right = newNode;
         }
         size++;
-        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        // Перемещаем новый узел в корень
         splay(newNode);
         return null;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+    // Удаление элемента по ключу
     @Override
     public String remove(Object key) {
         if (!(key instanceof Integer)) return null;
@@ -146,26 +146,26 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         if (node == null) return null;
 
         String oldValue = node.value;
-        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+        // Перемещаем удаляемый узел в корень
         splay(node);
 
-        // пїЅпїЅпїЅпїЅпїЅпїЅ 1: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // Случай 1: нет левого поддерева
         if (node.left == null) {
             root = node.right;
             if (root != null) root.parent = null;
         }
-        // пїЅпїЅпїЅпїЅпїЅпїЅ 2: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // Случай 2: нет правого поддерева
         else if (node.right == null) {
             root = node.left;
             if (root != null) root.parent = null;
         }
-        // пїЅпїЅпїЅпїЅпїЅпїЅ 3: пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // Случай 3: есть оба поддерева
         else {
-            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // Находим минимальный элемент в правом поддереве
             Node min = min(node.right);
-            // пїЅпїЅпїЅпїЅ min пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // Если min не является непосредственным правым потомком
             if (min.parent != node) {
-                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+                // Перестраиваем связи
                 if (min.right != null) {
                     min.right.parent = min.parent;
                 }
@@ -173,7 +173,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
                 min.right = node.right;
                 min.right.parent = min;
             }
-            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // Присоединяем левое поддерево
             min.left = node.left;
             min.left.parent = min;
             min.parent = null;
@@ -184,7 +184,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return oldValue;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Поиск узла с минимальным ключом в поддереве
     private Node min(Node node) {
         while (node.left != null) {
             node = node.left;
@@ -192,7 +192,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return node;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Поиск узла с максимальным ключом в поддереве
     private Node max(Node node) {
         while (node.right != null) {
             node = node.right;
@@ -200,30 +200,30 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return node;
     }
 
-    // Splay пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    // Splay операция - перемещение узла в корень
     private void splay(Node node) {
         while (node.parent != null) {
             if (node.parent.parent == null) {
-                // Zig - пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Zig - один поворот
                 if (node.parent.left == node) {
                     rotateRight(node.parent);
                 } else {
                     rotateLeft(node.parent);
                 }
             } else if (node.parent.left == node && node.parent.parent.left == node.parent) {
-                // Zig-Zig (пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
+                // Zig-Zig (правые повороты)
                 rotateRight(node.parent.parent);
                 rotateRight(node.parent);
             } else if (node.parent.right == node && node.parent.parent.right == node.parent) {
-                // Zig-Zig (пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
+                // Zig-Zig (левые повороты)
                 rotateLeft(node.parent.parent);
                 rotateLeft(node.parent);
             } else if (node.parent.left == node && node.parent.parent.right == node.parent) {
-                // Zig-Zag (пїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅ)
+                // Zig-Zag (правый-левый)
                 rotateRight(node.parent);
                 rotateLeft(node.parent);
             } else {
-                // Zig-Zag (пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅ)
+                // Zig-Zag (левый-правый)
                 rotateLeft(node.parent);
                 rotateRight(node.parent);
             }
@@ -231,18 +231,18 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         root = node;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Левый поворот
     private void rotateLeft(Node node) {
         Node rightChild = node.right;
         if (rightChild == null) return;
 
-        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // Перенастраиваем левое поддерево правого потомка
         node.right = rightChild.left;
         if (rightChild.left != null) {
             rightChild.left.parent = node;
         }
 
-        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // Обновляем родителя правого потомка
         rightChild.parent = node.parent;
         if (node.parent == null) {
             root = rightChild;
@@ -252,23 +252,23 @@ public class MySplayMap implements NavigableMap<Integer, String> {
             node.parent.right = rightChild;
         }
 
-        // пїЅпїЅпїЅпїЅпїЅпїЅ node пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ rightChild
+        // Делаем node левым потомком rightChild
         rightChild.left = node;
         node.parent = rightChild;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Правый поворот
     private void rotateRight(Node node) {
         Node leftChild = node.left;
         if (leftChild == null) return;
 
-        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // Перенастраиваем правое поддерево левого потомка
         node.left = leftChild.right;
         if (leftChild.right != null) {
             leftChild.right.parent = node;
         }
 
-        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // Обновляем родителя левого потомка
         leftChild.parent = node.parent;
         if (node.parent == null) {
             root = leftChild;
@@ -278,19 +278,19 @@ public class MySplayMap implements NavigableMap<Integer, String> {
             node.parent.left = leftChild;
         }
 
-        // пїЅпїЅпїЅпїЅпїЅпїЅ node пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ leftChild
+        // Делаем node правым потомком leftChild
         leftChild.right = node;
         node.parent = leftChild;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    // Очистка дерева
     @Override
     public void clear() {
         root = null;
         size = 0;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    // Строковое представление дерева
     @Override
     public String toString() {
         if (isEmpty()) return "{}";
@@ -305,7 +305,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return sb.toString();
     }
 
-    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ toString
+    // Обход дерева в порядке возрастания для toString
     private void inOrderToString(Node node, StringBuilder sb) {
         if (node == null) return;
         inOrderToString(node.left, sb);
@@ -313,7 +313,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         inOrderToString(node.right, sb);
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅпїЅ
+    // Получение первого (наименьшего) ключа
     @Override
     public Integer firstKey() {
         if (isEmpty()) throw new NoSuchElementException();
@@ -322,7 +322,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return minNode.key;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅпїЅ
+    // Получение последнего (наибольшего) ключа
     @Override
     public Integer lastKey() {
         if (isEmpty()) throw new NoSuchElementException();
@@ -331,7 +331,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return maxNode.key;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Наибольший ключ, строго меньший заданного
     @Override
     public Integer lowerKey(Integer key) {
         Node node = findLower(key);
@@ -342,17 +342,17 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return null;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Поиск наибольшего ключа, строго меньшего заданного
     private Node findLower(Integer key) {
         Node current = root;
         Node candidate = null;
         while (current != null) {
             int cmp = key.compareTo(current.key);
             if (cmp <= 0) {
-                // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Идем влево - текущий ключ слишком большой
                 current = current.left;
             } else {
-                // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Нашли кандидата, идем вправо для поиска большего
                 candidate = current;
                 current = current.right;
             }
@@ -360,7 +360,7 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return candidate;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Наибольший ключ, меньший или равный заданному
     @Override
     public Integer floorKey(Integer key) {
         Node node = findFloor(key);
@@ -371,28 +371,28 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return null;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Поиск наибольшего ключа, меньшего или равного заданному
     private Node findFloor(Integer key) {
         Node current = root;
         Node candidate = null;
         while (current != null) {
             int cmp = key.compareTo(current.key);
             if (cmp < 0) {
-                // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Идем влево - текущий ключ слишком большой
                 current = current.left;
             } else if (cmp > 0) {
-                // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Нашли кандидата, идем вправо для поиска большего
                 candidate = current;
                 current = current.right;
             } else {
-                // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Нашли точное совпадение
                 return current;
             }
         }
         return candidate;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Наименьший ключ, больший или равный заданному
     @Override
     public Integer ceilingKey(Integer key) {
         Node node = findCeiling(key);
@@ -403,28 +403,28 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return null;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Поиск наименьшего ключа, большего или равного заданному
     private Node findCeiling(Integer key) {
         Node current = root;
         Node candidate = null;
         while (current != null) {
             int cmp = key.compareTo(current.key);
             if (cmp < 0) {
-                // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Нашли кандидата, идем влево для поиска меньшего
                 candidate = current;
                 current = current.left;
             } else if (cmp > 0) {
-                // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Идем вправо - текущий ключ слишком маленький
                 current = current.right;
             } else {
-                // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Нашли точное совпадение
                 return current;
             }
         }
         return candidate;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Наименьший ключ, строго больший заданного
     @Override
     public Integer higherKey(Integer key) {
         Node node = findHigher(key);
@@ -435,25 +435,25 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return null;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Поиск наименьшего ключа, строго большего заданного
     private Node findHigher(Integer key) {
         Node current = root;
         Node candidate = null;
         while (current != null) {
             int cmp = key.compareTo(current.key);
             if (cmp < 0) {
-                // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Нашли кандидата, идем влево для поиска меньшего
                 candidate = current;
                 current = current.left;
             } else {
-                // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                // Идем вправо - текущий ключ слишком маленький
                 current = current.right;
             }
         }
         return candidate;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
+    // Получение части карты до указанного ключа (исключая)
     @Override
     public SortedMap<Integer, String> headMap(Integer toKey) {
         if (toKey == null) throw new NullPointerException();
@@ -462,20 +462,20 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return result;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ headMap
+    // Рекурсивное построение headMap
     private void headMap(Node node, Integer toKey, MySplayMap result) {
         if (node == null) return;
         if (node.key.compareTo(toKey) < 0) {
-            // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // Ключ подходит - добавляем
             result.put(node.key, node.value);
-            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // Обходим правое поддерево
             headMap(node.right, toKey, result);
         }
-        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // Всегда обходим левое поддерево
         headMap(node.left, toKey, result);
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
+    // Получение части карты от указанного ключа (включая)
     @Override
     public SortedMap<Integer, String> tailMap(Integer fromKey) {
         if (fromKey == null) throw new NullPointerException();
@@ -484,20 +484,20 @@ public class MySplayMap implements NavigableMap<Integer, String> {
         return result;
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ tailMap
+    // Рекурсивное построение tailMap
     private void tailMap(Node node, Integer fromKey, MySplayMap result) {
         if (node == null) return;
         if (node.key.compareTo(fromKey) >= 0) {
-            // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // Ключ подходит - добавляем
             result.put(node.key, node.value);
-            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            // Обходим левое поддерево
             tailMap(node.left, fromKey, result);
         }
-        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+        // Всегда обходим правое поддерево
         tailMap(node.right, fromKey, result);
     }
 
-    // пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+    // Методы, не реализованные в данной реализации
 
     @Override
     public Entry<Integer, String> lowerEntry(Integer key) {

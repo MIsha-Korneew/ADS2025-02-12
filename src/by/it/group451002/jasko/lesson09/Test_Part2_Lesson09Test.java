@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:src/by/it/group410901/korneew/lesson09/Test_Part2_Lesson09Test.java
-package by.it.group410901.korneew.lesson09;
-========
 package by.it.group451002.jasko.lesson09;
->>>>>>>> origin/main:src/by/it/group451002/jasko/lesson09/Test_Part2_Lesson09Test.java
 
 
 import by.it.HomeWork;
