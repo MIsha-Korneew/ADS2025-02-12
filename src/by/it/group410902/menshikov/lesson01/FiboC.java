@@ -12,7 +12,7 @@ public class FiboC {
 
     public static void main(String[] args) {
         FiboC fibo = new FiboC();
-        long n = 55555;
+        int n = 55555;
         int m = 1000;
         System.out.printf("fasterC(%d)=%d \n\t time=%d \n\n", n, fibo.fasterC(n, m), fibo.time());
     }
@@ -22,40 +22,32 @@ public class FiboC {
     }
 
     long fasterC(long n, int m) {
-        long pisanoPeriod = pisanoPeriodLength(m);
-        long reducedN = n % pisanoPeriod;
-        return fibonacciMod(reducedN, m);
+        //Интуитивно найти решение не всегда просто и
+        //возможно потребуется дополнительный поиск информации
+        long[][] matrix = {{1, 1}, {1, 0}};
+        long[][] result = {{1, 0}, {0, 1}};
+        n--;
+        while (n > 0) {
+            if (n % 2 == 1) {
+                result = multiply(result, matrix, m);
+            }
+            matrix = multiply(matrix, matrix, m);
+            n /= 2;
+        }
+        return result[0][0];
     }
 
-    private long pisanoPeriodLength(int m) {
-        long previous = 0;
-        long current = 1;
-        for (int i = 0; i < m * m; i++) {
-            long temp = current;
-            current = (previous + current) % m;
-            previous = temp;
-
-            // Период начинается с 0, 1
-            if (previous == 0 && current == 1) {
-                return i + 1;
+    private long[][] multiply(long[][] a, long[][] b, int m) {
+        long[][] c = new long[2][2];
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                for (int k = 0; k < 2; k++) {
+                    c[i][j] += a[i][k] * b[k][j];
+                }
+                c[i][j] %= m;
             }
         }
-        return 0; // Должно быть обнаружено
-    }
-
-    private long fibonacciMod(long n, int m) {
-        if (n == 0) return 0;
-        if (n == 1) return 1;
-
-        long previous = 0;
-        long current = 1;
-
-        for (long i = 2; i <= n; i++) {
-            long temp = current;
-            current = (previous + current) % m;
-            previous = temp;
-        }
-
-        return current;
+        return c;
     }
 }
+
